@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package prosdev;
+package TransferForm;
 
 import java.util.ArrayList;
 
@@ -11,21 +11,13 @@ import java.util.ArrayList;
  *
  * @author Hannah
  */
-public class InventoryModel {
-    private ArrayList<String> locationList;
-    private ArrayList<String> supplyList;
+public class TransferFormModel {
+    ArrayList<String> locationList;
     
     void setLocationList(ArrayList<String> locationList) {
         this.locationList = locationList;
     }
-    void setSupplyList(ArrayList<String> supplyList) {
-        this.supplyList = supplyList;
-    }
     ArrayList<String> getLocationList() {
         return locationList;
     }
-    ArrayList<String> getSupplyList() {
-        return supplyList;
-    }
-    
 }

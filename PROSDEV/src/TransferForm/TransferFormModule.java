@@ -3,30 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package prosdev;
+package TransferForm;
 
+import Database.DB;
+import static Database.DB.con;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTable;
-import static prosdev.DB.con;
 
 /**
  *
  * @author Hannah
  */
-public class InventoryModule {
-
-    /**
-     * @param args the command line arguments
-     */
+public class TransferFormModule {
+    
     public static void main(String[] args) {
-        InventoryModule m = new InventoryModule();
-        InventoryController ctrl = new InventoryController();
-        ctrl.updateModel(m.getLocationList(), m.getSupplyList());
+        TransferFormModule m = new TransferFormModule();
+        TransferFormController ctrl = new TransferFormController();
+        ctrl.updateModel(m.getLocationList());
         ctrl.updateView();
     }
     
@@ -45,21 +42,4 @@ public class InventoryModule {
         }
         return locationList;
     }
-    
-    ArrayList<String> getSupplyList() {
-        ArrayList<String> supplyList = new ArrayList<>();
-        try {
-            Statement s = con.createStatement();
-            String sql = ("SELECT distinct supply FROM inventory;");
-            ResultSet rs = s.executeQuery(sql);
-            
-            while(rs.next()) {
-                supplyList.add(rs.getString("supply"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return supplyList;
-    }
-    
 }
