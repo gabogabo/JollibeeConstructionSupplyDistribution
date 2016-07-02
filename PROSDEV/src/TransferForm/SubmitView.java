@@ -5,6 +5,7 @@
  */
 package TransferForm;
 
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -18,11 +19,23 @@ public class SubmitView extends javax.swing.JPanel {
     /**
      * Creates new form SubmitView
      */
-    public SubmitView(JFrame f) {
+    public SubmitView(JFrame f, String locA, String locB, ArrayList<ChooseSupplyView> itemViewList) {
         initComponents();
         
         this.f = f;
         form = (JPanel) f.getContentPane().getComponent(0);
+        
+        formDesc.setText("Transfer From " + locA + " to " + locB);
+        
+        int size = itemViewList.size();
+        String text = "";
+        ChooseSupplyView v;
+        for(int i = 0; i < size; i++) {
+            v = itemViewList.get(i);
+            text += v.itemName + ": " + v.amount + " " + v.sku + "\n";
+        }
+        
+        itemList.setText(text);
     }
 
     /**
@@ -37,17 +50,16 @@ public class SubmitView extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         confirmButton = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
+        formDesc = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        itemList = new javax.swing.JTextArea();
         backButton = new javax.swing.JButton();
 
-        setMinimumSize(new java.awt.Dimension(1100, 700));
-        setPreferredSize(new java.awt.Dimension(1100, 700));
+        setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setMinimumSize(new java.awt.Dimension(1098, 700));
+        jPanel1.setRequestFocusEnabled(false);
 
         jLabel6.setFont(new java.awt.Font("Quicksand Book", 0, 36)); // NOI18N
         jLabel6.setText("Transfer Form");
@@ -66,9 +78,9 @@ public class SubmitView extends javax.swing.JPanel {
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel7.setText("Transfer From Warehouse A to Warehouse B");
+        formDesc.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
+        formDesc.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        formDesc.setText("Transfer From Warehouse A to Warehouse B");
 
         jLabel8.setFont(new java.awt.Font("Quicksand Book Oblique", 0, 24)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -78,16 +90,15 @@ public class SubmitView extends javax.swing.JPanel {
         jScrollPane2.setBorder(null);
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
-        jTextArea1.setRows(5);
-        jTextArea1.setBorder(null);
-        jTextArea1.setEnabled(false);
-        jTextArea1.setFocusable(false);
-        jTextArea1.setOpaque(false);
-        jTextArea1.setRequestFocusEnabled(false);
-        jScrollPane2.setViewportView(jTextArea1);
+        itemList.setEditable(false);
+        itemList.setColumns(20);
+        itemList.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
+        itemList.setRows(5);
+        itemList.setBorder(null);
+        itemList.setEnabled(false);
+        itemList.setFocusable(false);
+        itemList.setRequestFocusEnabled(false);
+        jScrollPane2.setViewportView(itemList);
 
         backButton.setBackground(new java.awt.Color(255, 255, 255));
         backButton.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
@@ -112,7 +123,7 @@ public class SubmitView extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 799, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 825, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(formDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 825, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -126,7 +137,7 @@ public class SubmitView extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(formDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -177,11 +188,11 @@ public class SubmitView extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backButton;
     private javax.swing.JButton confirmButton;
+    private javax.swing.JLabel formDesc;
+    private javax.swing.JTextArea itemList;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,7 +5,9 @@
  */
 package TransferForm;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -14,19 +16,22 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class ChooseSupplyView extends javax.swing.JPanel {
 
+    public String amount;
+    public String sku;
+    public String itemName;
     /**
      * Creates new form ChooseSupplyView
      */
-    public ChooseSupplyView(ArrayList<String> supplyList) {
+    public ChooseSupplyView(String itemName, String sku) {
         initComponents();
+//        
+//        supplyComboBox.setModel(new DefaultComboBoxModel(supplyList.toArray()));
+//        supplyComboBox.setSelectedIndex(0);
+        this.itemName = itemName;
+        this.sku = sku;
+        itemLabel.setText(itemName);
         
-        supplyComboBox.setModel(new DefaultComboBoxModel(supplyList.toArray()));
-        supplyComboBox.setSelectedIndex(0);
-    }
-
-    public ChooseSupplyView() {
-        initComponents();
-        
+        jTextField1.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.DARK_GRAY));
     }
 
     /**
@@ -39,13 +44,13 @@ public class ChooseSupplyView extends javax.swing.JPanel {
     private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
-        supplyComboBox = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
+        itemLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setMaximumSize(new java.awt.Dimension(596, 58));
-        setMinimumSize(new java.awt.Dimension(596, 58));
-        setPreferredSize(new java.awt.Dimension(596, 58));
+        setMaximumSize(new java.awt.Dimension(570, 58));
+        setMinimumSize(new java.awt.Dimension(570, 58));
+        setPreferredSize(new java.awt.Dimension(570, 58));
 
         jTextField1.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -57,52 +62,48 @@ public class ChooseSupplyView extends javax.swing.JPanel {
             }
         });
 
-        supplyComboBox.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
-        supplyComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        supplyComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                supplyComboBoxActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(153, 153, 153));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setText("kg");
+
+        itemLabel.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
+        itemLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        itemLabel.setText("Item Name");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(supplyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(itemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(supplyComboBox, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jTextField1)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(itemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
+        amount = jTextField1.getText().trim();
     }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void supplyComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplyComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_supplyComboBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel itemLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JComboBox<String> supplyComboBox;
     // End of variables declaration//GEN-END:variables
 }

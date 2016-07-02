@@ -10,6 +10,7 @@ import static Database.DB.con;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,17 +30,25 @@ import javax.swing.JScrollPane;
 public class TransferFormView extends javax.swing.JPanel {
 
     //ArrayList<String> supplyList;
-    private ArrayList<ChooseSupplyView> supplyViews;
+    private ArrayList<ChooseSupplyView> itemViewList;
     private ArrayList<Integer> weightList;
     private JFrame f;
     
     public TransferFormView(JFrame f) {
         initComponents();
+        
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        double width = screenSize.getWidth();
+//        double height = screenSize.getHeight();
+//        this.setPreferredSize(screenSize);
+//        this.setMinimumSize(screenSize);
+        
         this.f = f;
-        supplyViews = new ArrayList<>();
+        itemViewList = new ArrayList<>();
         weightList = new ArrayList<>();
         
         choosePanel.setLayout(new GridLayout(0, 1, 0, 10));
+        
     }
     
     void updateComboBox(ArrayList<String> locationList) {
@@ -50,36 +59,48 @@ public class TransferFormView extends javax.swing.JPanel {
         toComboBox.setSelectedIndex(1);        
     }
     
-    void addMore() {
+    void updateChooseSuplies() {
         String location = fromComboBox.getSelectedItem().toString();
-        ArrayList<String> supplies = getSupplyList(location);
-        
-        ChooseSupplyView v = new ChooseSupplyView(supplies);
-        v.setVisible(true);
-        supplyViews.add(v);
-        choosePanel.setPreferredSize(new Dimension(619, choosePanel.getPreferredSize().height+68));
-        jScrollPane1.setPreferredSize(new Dimension(1100, jScrollPane1.getPreferredSize().height+68));
-        choosePanel.add(v);
+//        ArrayList<String> supplies = getSupplyList(location);
+        ArrayList<ChooseSupplyView> list = getItemViewList(location);
+        int size = list.size();
+        ChooseSupplyView v;
+        for(int i = 0; i < size; i++) {
+            v = list.get(i);
+            v.setVisible(true);   
+            itemViewList.add(v);
+            choosePanel.add(v);
+        }
+//        choosePanel.setPreferredSize(new Dimension(619, choosePanel.getPreferredSize().height+68));
+//        jScrollPane1.setPreferredSize(new Dimension(1100, jScrollPane1.getPreferredSize().height+68));
+        choosePanel.setPreferredSize(new Dimension(619, size*68));
+        //jScrollPane1.setPreferredSize(new Dimension(1100, jScrollPane1.getPreferredSize().height+(size*68)));
+        jPanel1.setPreferredSize(new Dimension(1100, jPanel1.getPreferredSize().height+(size*68)));
         choosePanel.repaint();
         choosePanel.revalidate();
     }
     
-    ArrayList<String> getSupplyList(String location) {
-        ArrayList<String> supplyList = new ArrayList<>();
+    ArrayList<ChooseSupplyView> getItemViewList(String location) {
+//        ArrayList<String> supplyList = new ArrayList<>();
+        ArrayList<ChooseSupplyView> itemViewList = new ArrayList<>();
         try {
             Statement s = con.createStatement();
             String sql = ("SELECT supply, weight FROM inventory WHERE location = '" + location + "';");
             ResultSet rs = s.executeQuery(sql);
             
             weightList.clear();
+            ChooseSupplyView v;
             while(rs.next()) {
-                supplyList.add(rs.getString("supply") + " - " + rs.getString("weight") + " kg");
-                weightList.add(rs.getInt("weight"));
+                v = new ChooseSupplyView(rs.getString("supply"), "kg");
+                itemViewList.add(v);
+//                supplyList.add(rs.getString("supply"));
+//                supplyList.add(rs.getString("supply") + " - " + rs.getString("weight") + " kg");
+//                weightList.add(rs.getInt("weight"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return supplyList;
+        return itemViewList;
     }
 
     /**
@@ -100,14 +121,11 @@ public class TransferFormView extends javax.swing.JPanel {
         jLabel9 = new javax.swing.JLabel();
         toComboBox = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
-        moreButton = new javax.swing.JButton();
         submitButton = new javax.swing.JButton();
         choosePanel = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setAutoscrolls(true);
-        setMinimumSize(new java.awt.Dimension(1100, 700));
-        setPreferredSize(new java.awt.Dimension(1100, 700));
 
         jScrollPane1.setBorder(null);
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -116,7 +134,6 @@ public class TransferFormView extends javax.swing.JPanel {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setAutoscrolls(true);
-        jPanel1.setMinimumSize(new java.awt.Dimension(1100, 700));
 
         jLabel6.setFont(new java.awt.Font("Quicksand Book", 0, 36)); // NOI18N
         jLabel6.setText("Transfer Form");
@@ -153,20 +170,6 @@ public class TransferFormView extends javax.swing.JPanel {
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Choose Warehouses");
 
-        moreButton.setBackground(new java.awt.Color(255, 255, 255));
-        moreButton.setFont(new java.awt.Font("Quicksand Light", 0, 24)); // NOI18N
-        moreButton.setText("Add more..");
-        moreButton.setBorder(null);
-        moreButton.setBorderPainted(false);
-        moreButton.setContentAreaFilled(false);
-        moreButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        moreButton.setFocusPainted(false);
-        moreButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                moreButtonActionPerformed(evt);
-            }
-        });
-
         submitButton.setBackground(new java.awt.Color(255, 255, 255));
         submitButton.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
         submitButton.setText("SUBMIT FORM");
@@ -189,7 +192,7 @@ public class TransferFormView extends javax.swing.JPanel {
         choosePanel.setLayout(choosePanelLayout);
         choosePanelLayout.setHorizontalGroup(
             choosePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 619, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         choosePanelLayout.setVerticalGroup(
             choosePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,31 +204,28 @@ public class TransferFormView extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(moreButton, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(27, 27, 27)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(toComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(fromComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(choosePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(466, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(choosePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(toComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(fromComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(477, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(34, 34, 34)
@@ -251,14 +251,12 @@ public class TransferFormView extends javax.swing.JPanel {
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(choosePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(moreButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(224, Short.MAX_VALUE))
+                .addContainerGap(299, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(138, 138, 138)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(527, Short.MAX_VALUE)))
+                    .addContainerGap(542, Short.MAX_VALUE)))
         );
 
         jScrollPane1.setViewportView(jPanel1);
@@ -285,24 +283,11 @@ public class TransferFormView extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_toComboBoxActionPerformed
 
-    private void moreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moreButtonActionPerformed
-        // TODO add your handling code here:
-        addMore();
-    }//GEN-LAST:event_moreButtonActionPerformed
-
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
-//        int result = JOptionPane.showConfirmDialog(jPanel1, "Are you sure you want to submit this form?", "Confirm Submission", JOptionPane.YES_NO_OPTION);
-//        
-//        if(result == JOptionPane.YES_OPTION) {
-//            
-//        }
-//        else if(result == JOptionPane.NO_OPTION) {
-//            
-//        }
-
-//        JFrame ff = new JFrame();
-//        ff.setMinimumSize(new Dimension(1100, 700));
-        SubmitView s = new SubmitView(f);
+        String locA = fromComboBox.getSelectedItem().toString();
+        String locB = toComboBox.getSelectedItem().toString();
+        
+        SubmitView s = new SubmitView(f, locA, locB, itemViewList);
         f.getContentPane().removeAll();
         f.add(s);
         f.setVisible(true);
@@ -322,7 +307,6 @@ public class TransferFormView extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     protected javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton moreButton;
     private javax.swing.JButton submitButton;
     private javax.swing.JComboBox<String> toComboBox;
     // End of variables declaration//GEN-END:variables

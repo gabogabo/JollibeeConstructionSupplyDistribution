@@ -6,6 +6,7 @@
 package TransferForm;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
@@ -21,11 +22,17 @@ public class TransferFormController {
         model = new TransferFormModel();
         
         JFrame f = new JFrame();
-        f.setMinimumSize(new Dimension(1100, 700));
+        f.setMinimumSize(getDimension());
+        f.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         view = new TransferFormView(f);
         view.setVisible(true);
         f.add(view);
         f.setVisible(true);
+    }
+    
+    Dimension getDimension() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        return screenSize;
     }
     
     void updateModel(ArrayList<String> locationList) {
@@ -34,7 +41,7 @@ public class TransferFormController {
     
     void updateView() {
         view.updateComboBox(model.getLocationList());
-        view.addMore();
+        view.updateChooseSuplies();
     }
     
 }
