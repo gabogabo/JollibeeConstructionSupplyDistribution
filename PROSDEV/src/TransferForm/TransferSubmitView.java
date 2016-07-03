@@ -5,6 +5,8 @@
  */
 package TransferForm;
 
+import Main.MainView;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,17 +15,20 @@ import javax.swing.JPanel;
  *
  * @author Hannah
  */
-public class SubmitView extends javax.swing.JPanel {
+public class TransferSubmitView extends javax.swing.JPanel {
     private JFrame f;
     private JPanel form;
     /**
      * Creates new form SubmitView
      */
-    public SubmitView(JFrame f, String locA, String locB, ArrayList<ChooseSupplyView> itemViewList) {
+    public TransferSubmitView(TransferFormView form, String locA, String locB, ArrayList<ChooseSupplyView> itemViewList) {
         initComponents();
+        setSize(new Dimension(1100, 700));
         
-        this.f = f;
-        form = (JPanel) f.getContentPane().getComponent(0);
+//        this.f = f;
+//        form = (JPanel) f.getContentPane().getComponent(0);
+
+        this.form = form;
         
         formDesc.setText("Transfer From " + locA + " to " + locB);
         
@@ -48,7 +53,6 @@ public class SubmitView extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
         confirmButton = new javax.swing.JButton();
         formDesc = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -60,9 +64,6 @@ public class SubmitView extends javax.swing.JPanel {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setRequestFocusEnabled(false);
-
-        jLabel6.setFont(new java.awt.Font("Quicksand Book", 0, 36)); // NOI18N
-        jLabel6.setText("Transfer Form");
 
         confirmButton.setBackground(new java.awt.Color(255, 255, 255));
         confirmButton.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
@@ -122,36 +123,33 @@ public class SubmitView extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(826, Short.MAX_VALUE)
                 .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addComponent(confirmButton, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(74, 74, 74)
+                .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 799, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(formDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 825, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(199, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(confirmButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(59, 59, 59)
+                .addGap(27, 27, 27)
                 .addComponent(formDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
-                .addGap(99, 99, 99))
+                .addGap(137, 137, 137))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -173,20 +171,24 @@ public class SubmitView extends javax.swing.JPanel {
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
         FinishedView v = new FinishedView();
         
-        f.getContentPane().removeAll();
-        f.add(v);
-        v.setVisible(true);
-        f.repaint();
-        f.revalidate();
+        MainView.frame.setMainPanel(v);
+        
+//        f.getContentPane().removeAll();
+//        f.add(v);
+//        v.setVisible(true);
+//        f.repaint();
+//        f.revalidate();
     }//GEN-LAST:event_confirmButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         // TODO add your handling code here:
         
-        f.getContentPane().removeAll();
-        f.add(form);
-        f.repaint();
-        f.revalidate();
+        MainView.frame.setMainPanel(form);
+        
+//        f.getContentPane().removeAll();
+//        f.add(form);
+//        f.repaint();
+//        f.revalidate();
     }//GEN-LAST:event_backButtonActionPerformed
 
 
@@ -195,7 +197,6 @@ public class SubmitView extends javax.swing.JPanel {
     private javax.swing.JButton confirmButton;
     private javax.swing.JLabel formDesc;
     private javax.swing.JTextArea itemList;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;

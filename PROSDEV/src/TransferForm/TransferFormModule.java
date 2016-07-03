@@ -20,10 +20,9 @@ import java.util.logging.Logger;
  */
 public class TransferFormModule {
     
-    public static void main(String[] args) {
-        TransferFormModule m = new TransferFormModule();
+    public void start() {
         TransferFormController ctrl = new TransferFormController();
-        ctrl.updateModel(m.getLocationList());
+        ctrl.updateModel(getLocationList());
         ctrl.updateView();
     }
     

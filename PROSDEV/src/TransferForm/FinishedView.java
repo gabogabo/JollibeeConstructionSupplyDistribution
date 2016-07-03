@@ -19,6 +19,7 @@ public class FinishedView extends javax.swing.JPanel {
      */
     public FinishedView() {
         initComponents();
+        setSize(new Dimension(1100, 700));
         Dimension s = Toolkit.getDefaultToolkit().getScreenSize();
         label.setLocation(s.height/2, s.width/2);
     }

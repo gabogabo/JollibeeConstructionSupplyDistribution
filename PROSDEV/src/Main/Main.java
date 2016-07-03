@@ -5,16 +5,16 @@
  */
 package Main;
 
+import Inventory.InventoryModule;
+
 /**
  *
  * @author Hannah
  */
 public class Main {
     
-    public static void main() {
-        Main m = new Main();
-        MainView v = new MainView();
-        v.setVisible(true);
+    public static void main(String args[]) {
+        MainView.frame.setVisible(true);
     }
     
 }

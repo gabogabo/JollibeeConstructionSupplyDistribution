@@ -5,6 +5,7 @@
  */
 package Inventory;
 
+import Main.MainView;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
@@ -19,7 +20,6 @@ public class InventoryController {
     public InventoryController() {
         model = new InventoryModel();
         view = new InventoryView();
-        view.setVisible(true);
     }
     
     void updateModel(ArrayList<String> locationList, ArrayList<String> supplyList) {
@@ -30,5 +30,6 @@ public class InventoryController {
     void updateView() {
         view.updateComboBox(model.getLocationList(), model.getSupplyList());
         view.updateTable("Show All", "Show All");
+        MainView.frame.setMainPanel(view.inventoryPanel);
     }
 }
