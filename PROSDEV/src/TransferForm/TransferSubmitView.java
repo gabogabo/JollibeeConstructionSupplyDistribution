@@ -37,7 +37,7 @@ public class TransferSubmitView extends javax.swing.JPanel {
         ChooseSupplyView v;
         for(int i = 0; i < size; i++) {
             v = itemViewList.get(i);
-            text += v.itemName + ": " + v.amount + " " + v.sku + "\n";
+            text += v.itemName + ": " + v.userCountInput + " " + v.unit + "\n";
         }
         
         itemList.setText(text);
@@ -172,23 +172,10 @@ public class TransferSubmitView extends javax.swing.JPanel {
         FinishedView v = new FinishedView();
         
         MainView.frame.setMainPanel(v);
-        
-//        f.getContentPane().removeAll();
-//        f.add(v);
-//        v.setVisible(true);
-//        f.repaint();
-//        f.revalidate();
     }//GEN-LAST:event_confirmButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        // TODO add your handling code here:
-        
         MainView.frame.setMainPanel(form);
-        
-//        f.getContentPane().removeAll();
-//        f.add(form);
-//        f.repaint();
-//        f.revalidate();
     }//GEN-LAST:event_backButtonActionPerformed
 
 

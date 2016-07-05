@@ -16,21 +16,21 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class ChooseSupplyView extends javax.swing.JPanel {
 
-    public String amount;
-    public String sku;
+    public String userCountInput;
+    public String unit;
     public String itemName;
     /**
      * Creates new form ChooseSupplyView
      */
-    public ChooseSupplyView(String itemName, String sku) {
+    public ChooseSupplyView(String itemName, String unit, String count) {
         initComponents();
-//        
-//        supplyComboBox.setModel(new DefaultComboBoxModel(supplyList.toArray()));
-//        supplyComboBox.setSelectedIndex(0);
-        amount = "0";
+        
         this.itemName = itemName;
-        this.sku = sku;
+        this.unit = unit;
+        unitLabel.setText(unit);
         itemLabel.setText(itemName);
+        countLabel.setText(count);
+        userCountInput = "0";
         
         jTextField1.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.DARK_GRAY));
     }
@@ -44,14 +44,22 @@ public class ChooseSupplyView extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        itemLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        unitLabel = new javax.swing.JLabel();
         itemLabel = new javax.swing.JLabel();
+        countLabel = new javax.swing.JLabel();
+        itemLabel3 = new javax.swing.JLabel();
+
+        itemLabel2.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
+        itemLabel2.setForeground(new java.awt.Color(153, 153, 153));
+        itemLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        itemLabel2.setText("Count");
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setMaximumSize(new java.awt.Dimension(570, 58));
-        setMinimumSize(new java.awt.Dimension(570, 58));
-        setPreferredSize(new java.awt.Dimension(570, 58));
+        setMaximumSize(new java.awt.Dimension(955, 58));
+        setMinimumSize(new java.awt.Dimension(955, 58));
+        setPreferredSize(new java.awt.Dimension(955, 58));
 
         jTextField1.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -74,35 +82,50 @@ public class ChooseSupplyView extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setText("kg");
+        unitLabel.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
+        unitLabel.setForeground(new java.awt.Color(153, 153, 153));
+        unitLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        unitLabel.setText("kg");
 
         itemLabel.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
         itemLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         itemLabel.setText("Item Name");
+
+        countLabel.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
+        countLabel.setForeground(new java.awt.Color(153, 153, 153));
+        countLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        countLabel.setText("Count");
+
+        itemLabel3.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
+        itemLabel3.setForeground(new java.awt.Color(153, 153, 153));
+        itemLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        itemLabel3.setText("left");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addContainerGap()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(unitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(itemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addComponent(itemLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(countLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(itemLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(itemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(unitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(itemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(countLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(itemLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -125,13 +148,16 @@ public class ChooseSupplyView extends javax.swing.JPanel {
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         // TODO add your handling code here:
         
-        amount = jTextField1.getText().trim();
+        userCountInput = jTextField1.getText().trim();
     }//GEN-LAST:event_jTextField1KeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel countLabel;
     private javax.swing.JLabel itemLabel;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel itemLabel2;
+    private javax.swing.JLabel itemLabel3;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel unitLabel;
     // End of variables declaration//GEN-END:variables
 }

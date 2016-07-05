@@ -49,7 +49,8 @@ public class InventoryView extends javax.swing.JFrame {
         
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Supply");
-        model.addColumn("Weight (in kg)");
+        model.addColumn("Type");
+        model.addColumn("Count");
         
         String where = "";
         if(!location.equals("Show All") && !supply.equals("Show All"))
@@ -61,10 +62,10 @@ public class InventoryView extends javax.swing.JFrame {
         
         try {
             Statement s = con.createStatement();
-            String sql = ("select supply, sum(weight) as weight\n" +
+            String sql = ("select supply, type, sum(count) as count, unit\n" +
                             "from inventory\n" +
                             where +
-                            "group by supply;");
+                            "group by  concat(supply, type);");
             ResultSet rs = s.executeQuery(sql);
             
             ArrayList tableData = new ArrayList();
@@ -72,7 +73,8 @@ public class InventoryView extends javax.swing.JFrame {
             while(rs.next()) {
                 row = new ArrayList();
                 row.add(rs.getString("supply"));
-                row.add(rs.getString("weight"));
+                row.add(rs.getString("type"));
+                row.add(rs.getString("count") + " " + rs.getString("unit"));
                 model.addRow(row.toArray());
             }
         } catch (SQLException ex) {

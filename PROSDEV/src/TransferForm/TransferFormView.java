@@ -9,9 +9,7 @@ import Database.DB;
 import static Database.DB.con;
 import Main.MainView;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,10 +17,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 
 /**
  *
@@ -69,12 +63,13 @@ public class TransferFormView extends javax.swing.JPanel {
         ArrayList<ChooseSupplyView> itemViewList = new ArrayList<>();
         try {
             Statement s = con.createStatement();
-            String sql = ("SELECT supply, weight FROM inventory WHERE location = '" + location + "';");
+            String sql = ("SELECT concat(supply, ' - ',type) as supply, sum(count) as count, unit \n" + 
+                            "FROM inventory WHERE location = '" + location + "' GROUP BY concat(supply, ' - ',type);");
             ResultSet rs = s.executeQuery(sql);
             
             ChooseSupplyView v;
             while(rs.next()) {
-                v = new ChooseSupplyView(rs.getString("supply"), "kg");
+                v = new ChooseSupplyView(rs.getString("supply"), rs.getString("unit"), rs.getString("count") + " " + rs.getString("unit"));
                 itemViewList.add(v);
             }
         } catch (SQLException ex) {
@@ -159,14 +154,14 @@ public class TransferFormView extends javax.swing.JPanel {
         });
 
         choosePanel.setBackground(new java.awt.Color(255, 255, 255));
-        choosePanel.setMaximumSize(new java.awt.Dimension(619, 32767));
-        choosePanel.setMinimumSize(new java.awt.Dimension(619, 0));
+        choosePanel.setMaximumSize(new java.awt.Dimension(960, 32767));
+        choosePanel.setMinimumSize(new java.awt.Dimension(960, 0));
 
         javax.swing.GroupLayout choosePanelLayout = new javax.swing.GroupLayout(choosePanel);
         choosePanel.setLayout(choosePanelLayout);
         choosePanelLayout.setHorizontalGroup(
             choosePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 960, Short.MAX_VALUE)
         );
         choosePanelLayout.setVerticalGroup(
             choosePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,13 +181,6 @@ public class TransferFormView extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(choosePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 586, Short.MAX_VALUE))
-                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(37, 37, 37)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -202,7 +190,13 @@ public class TransferFormView extends javax.swing.JPanel {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(fromComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(fromComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(choosePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -257,12 +251,6 @@ public class TransferFormView extends javax.swing.JPanel {
         
         TransferSubmitView s = new TransferSubmitView(this, locA, locB, itemViewList);
         MainView.frame.setMainPanel(s);
-//        f.getContentPane().removeAll();
-//        f.add(s);
-//        f.setVisible(true);
-//        s.setVisible(true);
-//        f.repaint();
-//        f.revalidate();
     }//GEN-LAST:event_submitButtonActionPerformed
 
 
