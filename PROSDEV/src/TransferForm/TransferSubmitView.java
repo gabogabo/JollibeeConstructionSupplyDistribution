@@ -4,10 +4,15 @@
  * and open the template in the editor.
  */
 package TransferForm;
-
+import Database.DB;
+import java.sql.SQLException;
+import java.sql.Statement;
+import static Database.DB.con;
 import Main.MainView;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -18,6 +23,10 @@ import javax.swing.JPanel;
 public class TransferSubmitView extends javax.swing.JPanel {
     private JFrame f;
     private JPanel form;
+    int size;
+    ArrayList<ChooseSupplyView> iVL;
+    String locA;
+    String locB;
     /**
      * Creates new form SubmitView
      */
@@ -29,11 +38,13 @@ public class TransferSubmitView extends javax.swing.JPanel {
 //        form = (JPanel) f.getContentPane().getComponent(0);
 
         this.form = form;
-        
+        this.locA = locA;
+        this.locB = locB;
         formDesc.setText("Transfer From " + locA + " to " + locB);
         
-        int size = itemViewList.size();
+        size = itemViewList.size();
         String text = "";
+        iVL = itemViewList;
         ChooseSupplyView v;
         for(int i = 0; i < size; i++) {
             v = itemViewList.get(i);
@@ -170,7 +181,24 @@ public class TransferSubmitView extends javax.swing.JPanel {
 
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
         FinishedView v = new FinishedView();
-        
+        /* DISREGARD
+        ChooseSupplyView view;
+        for(int i = 0; i < size; i++){
+            view = iVL.get(i);
+            //get locA and locB
+            //place in supply table and supply_transfer table?
+            //execute sql statement
+            try{
+                
+                Statement s = con.createStatement();
+                String sql = "INSERT into some"
+                s.executeQuery(sql);
+                      
+            }
+            catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }*/
         MainView.frame.setMainPanel(v);
     }//GEN-LAST:event_confirmButtonActionPerformed
 
