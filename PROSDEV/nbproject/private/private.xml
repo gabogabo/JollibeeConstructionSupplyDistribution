@@ -3,9 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Hannah/Documents/GitHub/JollibeeConstructionSupplyDistribution/PROSDEV/src/TransferForm/ChooseSupplyView.java</file>
-            <file>file:/C:/Users/Hannah/Documents/GitHub/JollibeeConstructionSupplyDistribution/PROSDEV/src/RequestForm/RequestFormView.java</file>
-            <file>file:/C:/Users/Hannah/Documents/GitHub/JollibeeConstructionSupplyDistribution/PROSDEV/src/TransferForm/TransferFormView.java</file>
+            <file>file:/C:/Users/Hannah/Documents/GitHub/JollibeeConstructionSupplyDistribution/PROSDEV/src/Inventory/InventoryView.java</file>
+            <file>file:/C:/Users/Hannah/Documents/GitHub/JollibeeConstructionSupplyDistribution/PROSDEV/src/Inventory/InventoryModule.java</file>
+            <file>file:/C:/Users/Hannah/Documents/GitHub/JollibeeConstructionSupplyDistribution/PROSDEV/src/Inventory/InventoryController.java</file>
         </group>
     </open-files>
 </project-private>

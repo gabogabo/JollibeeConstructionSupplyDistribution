@@ -32,6 +32,7 @@ public class TransferFormView extends javax.swing.JPanel {
         itemViewList = new ArrayList<>();
         choosePanel.setLayout(new GridLayout(0, 1, 0, 10));
         setSize(new Dimension(1100, 700));
+        
     }
     
     void updateComboBox(ArrayList<String> locationList) {

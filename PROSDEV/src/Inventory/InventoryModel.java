@@ -12,17 +12,17 @@ import java.util.ArrayList;
  * @author Hannah
  */
 public class InventoryModel {
-    private ArrayList<String> locationList;
+    private ArrayList<String> warehouseList;
     private ArrayList<String> supplyList;
     
-    void setLocationList(ArrayList<String> locationList) {
-        this.locationList = locationList;
+    void setWarehouseList(ArrayList<String> warehouseList) {
+        this.warehouseList = warehouseList;
     }
     void setSupplyList(ArrayList<String> supplyList) {
         this.supplyList = supplyList;
     }
-    ArrayList<String> getLocationList() {
-        return locationList;
+    ArrayList<String> getWarehouseList() {
+        return warehouseList;
     }
     ArrayList<String> getSupplyList() {
         return supplyList;
