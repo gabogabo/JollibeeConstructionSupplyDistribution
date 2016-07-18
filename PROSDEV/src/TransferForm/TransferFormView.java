@@ -10,6 +10,7 @@ import static Database.DB.con;
 import Main.MainView;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,19 +36,21 @@ public class TransferFormView extends javax.swing.JPanel {
         
     }
     
-    void updateComboBox(ArrayList<String> locationList) {
-        fromComboBox.setModel(new DefaultComboBoxModel(locationList.toArray()));
-        toComboBox.setModel(new DefaultComboBoxModel(locationList.toArray()));
+    void updateComboBox(ArrayList<String> warehouseList) {
+        fromComboBox.setModel(new DefaultComboBoxModel(warehouseList.toArray()));
+        toComboBox.setModel(new DefaultComboBoxModel(warehouseList.toArray()));
         
         fromComboBox.setSelectedIndex(0);
         toComboBox.setSelectedIndex(1);        
     }
     
     void updateChooseSuplies() {
-        String location = fromComboBox.getSelectedItem().toString();
-        ArrayList<ChooseSupplyView> list = getItemViewList(location);
+        int whouse_id = fromComboBox.getSelectedIndex();
+        ArrayList<ChooseSupplyView> list = getItemViewList(whouse_id);
+        itemViewList = new ArrayList<>();
         int size = list.size();
         ChooseSupplyView v;
+        choosePanel.removeAll();
         for(int i = 0; i < size; i++) {
             v = list.get(i);
             v.setVisible(true);   
@@ -60,6 +63,29 @@ public class TransferFormView extends javax.swing.JPanel {
         choosePanel.revalidate();
     }
     
+    ArrayList<ChooseSupplyView> getItemViewList(int whouse_id) {
+        ArrayList<ChooseSupplyView> itemViewList = new ArrayList<>();
+        String sql = 
+                "SELECT supply_id as 'id', CONCAT(s.name, ' (', type, ')') as supply, count, unit\n" +
+                "FROM supply s INNER JOIN warehouse w ON s.whouse_id = w.whouse_id\n" +
+                "WHERE w.whouse_id = ?;";
+        try {
+            PreparedStatement s = con.prepareStatement(sql);
+            s.setInt(1, whouse_id);
+            ResultSet rs = s.executeQuery();
+            
+            ChooseSupplyView v;
+            while(rs.next()) {
+                v = new ChooseSupplyView(rs.getInt("id"), rs.getString("supply"), rs.getString("unit"), rs.getString("count") + " " + rs.getString("unit"));
+                itemViewList.add(v);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return itemViewList;
+    }
+    
+    /*
     ArrayList<ChooseSupplyView> getItemViewList(String location) {
         ArrayList<ChooseSupplyView> itemViewList = new ArrayList<>();
         try {
@@ -77,7 +103,7 @@ public class TransferFormView extends javax.swing.JPanel {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return itemViewList;
-    }
+    }*/
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -155,14 +181,15 @@ public class TransferFormView extends javax.swing.JPanel {
         });
 
         choosePanel.setBackground(new java.awt.Color(255, 255, 255));
-        choosePanel.setMaximumSize(new java.awt.Dimension(960, 32767));
-        choosePanel.setMinimumSize(new java.awt.Dimension(960, 0));
+        choosePanel.setMaximumSize(new java.awt.Dimension(1000, 32767));
+        choosePanel.setMinimumSize(new java.awt.Dimension(1000, 0));
+        choosePanel.setPreferredSize(new java.awt.Dimension(1000, 0));
 
         javax.swing.GroupLayout choosePanelLayout = new javax.swing.GroupLayout(choosePanel);
         choosePanel.setLayout(choosePanelLayout);
         choosePanelLayout.setHorizontalGroup(
             choosePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 960, Short.MAX_VALUE)
+            .addGap(0, 1000, Short.MAX_VALUE)
         );
         choosePanelLayout.setVerticalGroup(
             choosePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -183,15 +210,15 @@ public class TransferFormView extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(37, 37, 37)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(toComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(toComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(fromComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(fromComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -239,19 +266,25 @@ public class TransferFormView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void fromComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromComboBoxActionPerformed
-        // TODO add your handling code here:
+        updateChooseSuplies();
     }//GEN-LAST:event_fromComboBoxActionPerformed
 
     private void toComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toComboBoxActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_toComboBoxActionPerformed
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
-        String locA = fromComboBox.getSelectedItem().toString();
-        String locB = toComboBox.getSelectedItem().toString();
+        String whouseA = fromComboBox.getSelectedItem().toString();
+        String whouseB = toComboBox.getSelectedItem().toString();
+        int whouseA_id = fromComboBox.getSelectedIndex();
+        int whouseB_id = toComboBox.getSelectedIndex();
         
-        TransferSubmitView s = new TransferSubmitView(this, locA, locB, itemViewList);
-        MainView.frame.setMainPanel(s);
+        System.out.println("> " + whouseA_id + ", " + whouseB_id);
+        
+        if(whouseA_id != whouseB_id) {
+            TransferSubmitView s = new TransferSubmitView(this, whouseA, whouseB, whouseA_id, whouseB_id, itemViewList);
+            MainView.frame.setMainPanel(s);
+        }
     }//GEN-LAST:event_submitButtonActionPerformed
 
 

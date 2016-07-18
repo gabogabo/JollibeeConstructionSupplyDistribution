@@ -22,10 +22,27 @@ public class TransferFormModule {
     
     public void start() {
         TransferFormController ctrl = new TransferFormController();
-        ctrl.updateModel(getLocationList());
+        ctrl.updateModel(getWarehouseList());
         ctrl.updateView();
     }
     
+    ArrayList<String> getWarehouseList() {
+        ArrayList<String> locationList = new ArrayList<>();
+        try {
+            Statement s = con.createStatement();
+            String sql = ("SELECT CONCAT(name, ', ', location) as 'warehouse' FROM warehouse ORDER BY whouse_id;");
+            ResultSet rs = s.executeQuery(sql);
+            
+            while(rs.next()) {
+                locationList.add(rs.getString("warehouse"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return locationList;
+    }
+    
+    /* the code on 7/16/16
     ArrayList<String> getLocationList() {
         ArrayList<String> locationList = new ArrayList<>();
         try {
@@ -40,5 +57,5 @@ public class TransferFormModule {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return locationList;
-    }
+    }*/
 }

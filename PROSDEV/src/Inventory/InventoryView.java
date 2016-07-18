@@ -48,17 +48,6 @@ public class InventoryView extends javax.swing.JFrame {
         model.addColumn("Type");
         model.addColumn("Count");
         
-        /*String where = "";
-        if(!location.equals("Show All") && !supply.equals("Show All"))
-            where = "where location = \"" + location + "\" and supply = \"" + supply + "\"\n";
-        else if(!location.equals("Show All"))
-            where = "where location = \"" + location + "\"\n";
-        else if(!supply.equals("Show All"))
-            where = "where supply = \"" + supply + "\"\n";*/
-        
-        System.out.println("warehouse select: " + warehouseComboBox.getSelectedItem().toString() + " >>> " + warehouseComboBox.getSelectedIndex());
-        System.out.println(">> " + whouse_id + ", " + supply_name);
-        
         boolean hasWhouse = false, hasSupply = false;
         String where = "";
         if(whouse_id != -1 && !supply_name.equals("Show All")) {
@@ -83,11 +72,6 @@ public class InventoryView extends javax.swing.JFrame {
             "ORDER BY supply_id;";
         
         try {
-            /*Statement s = con.createStatement();
-            /*String sql = ("select supply, type, sum(count) as count, unit\n" +
-                            "from inventory\n" +
-                            where +
-                            "group by  concat(supply, type);");*/
             PreparedStatement s = con.prepareStatement(sql);
             
             if(hasWhouse && hasSupply) {
@@ -102,9 +86,7 @@ public class InventoryView extends javax.swing.JFrame {
             }
             
             ResultSet rs = s.executeQuery();
-            System.out.println(s);
             
-            //ArrayList tableData = new ArrayList();
             ArrayList row;
             while(rs.next()) {
                 row = new ArrayList();

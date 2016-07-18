@@ -12,12 +12,12 @@ import java.util.ArrayList;
  * @author Hannah
  */
 public class TransferFormModel {
-    ArrayList<String> locationList;
+    ArrayList<String> warehouseList;
     
-    void setLocationList(ArrayList<String> locationList) {
-        this.locationList = locationList;
+    void setWarehouseList(ArrayList<String> warehouseList) {
+        this.warehouseList = warehouseList;
     }
-    ArrayList<String> getLocationList() {
-        return locationList;
+    ArrayList<String> getWarehouseList() {
+        return warehouseList;
     }
 }

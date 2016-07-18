@@ -16,15 +16,17 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class ChooseSupplyView extends javax.swing.JPanel {
 
-    public String userCountInput;
-    public String unit;
-    public String itemName;
+    private String userCountInput;
+    private final String unit;
+    private final String itemName;
+    public final int id;
     /**
      * Creates new form ChooseSupplyView
      */
-    public ChooseSupplyView(String itemName, String unit, String count) {
+    public ChooseSupplyView(int id, String itemName, String unit, String count) {
         initComponents();
         
+        this.id = id;
         this.itemName = itemName;
         this.unit = unit;
         unitLabel.setText(unit);
@@ -33,6 +35,22 @@ public class ChooseSupplyView extends javax.swing.JPanel {
         userCountInput = "0";
         
         jTextField1.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.DARK_GRAY));
+    }
+    
+    public int getSupplyID() {
+        return id;
+    }
+    
+    public float getUserCountInput() {
+        return Float.parseFloat(userCountInput);
+    }
+    
+    public String getUnit() {
+        return unit;
+    }
+    
+    public String getItemName() {
+        return itemName;
     }
 
     /**
@@ -65,6 +83,9 @@ public class ChooseSupplyView extends javax.swing.JPanel {
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextField1.setText("0");
         jTextField1.setBorder(null);
+        jTextField1.setMaximumSize(new java.awt.Dimension(130, 25));
+        jTextField1.setMinimumSize(new java.awt.Dimension(130, 25));
+        jTextField1.setPreferredSize(new java.awt.Dimension(130, 25));
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
@@ -86,20 +107,32 @@ public class ChooseSupplyView extends javax.swing.JPanel {
         unitLabel.setForeground(new java.awt.Color(153, 153, 153));
         unitLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         unitLabel.setText("kg");
+        unitLabel.setMaximumSize(new java.awt.Dimension(150, 25));
+        unitLabel.setMinimumSize(new java.awt.Dimension(150, 25));
+        unitLabel.setPreferredSize(new java.awt.Dimension(150, 25));
 
         itemLabel.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
         itemLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         itemLabel.setText("Item Name");
+        itemLabel.setMaximumSize(new java.awt.Dimension(410, 25));
+        itemLabel.setMinimumSize(new java.awt.Dimension(410, 25));
+        itemLabel.setPreferredSize(new java.awt.Dimension(410, 25));
 
         countLabel.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
         countLabel.setForeground(new java.awt.Color(153, 153, 153));
         countLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         countLabel.setText("Count");
+        countLabel.setMaximumSize(new java.awt.Dimension(134, 25));
+        countLabel.setMinimumSize(new java.awt.Dimension(134, 25));
+        countLabel.setPreferredSize(new java.awt.Dimension(134, 25));
 
         itemLabel3.setFont(new java.awt.Font("Quicksand Book", 0, 24)); // NOI18N
         itemLabel3.setForeground(new java.awt.Color(153, 153, 153));
         itemLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         itemLabel3.setText("left");
+        itemLabel3.setMaximumSize(new java.awt.Dimension(50, 25));
+        itemLabel3.setMinimumSize(new java.awt.Dimension(50, 25));
+        itemLabel3.setPreferredSize(new java.awt.Dimension(50, 25));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -111,11 +144,12 @@ public class ChooseSupplyView extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(unitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(itemLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(itemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(countLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(itemLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(itemLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(29, 29, 29))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,23 +165,18 @@ public class ChooseSupplyView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-//        amount = jTextField1.getText().trim();
+        userCountInput = jTextField1.getText().trim();
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
-        // TODO add your handling code here:
-//        amount = jTextField1.getText().trim();
+
     }//GEN-LAST:event_jTextField1KeyPressed
 
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
-        // TODO add your handling code here:
-//        amount = jTextField1.getText().trim();
+           
     }//GEN-LAST:event_jTextField1KeyTyped
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-        // TODO add your handling code here:
-        
         userCountInput = jTextField1.getText().trim();
     }//GEN-LAST:event_jTextField1KeyReleased
 

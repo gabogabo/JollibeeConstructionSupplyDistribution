@@ -36,7 +36,7 @@ public class RequestSubmitView extends javax.swing.JPanel {
         ChooseSupplyView v;
         for(int i = 0; i < size; i++) {
             v = itemViewList.get(i);
-            text += v.itemName + ": " + v.userCountInput + " " + v.unit + "\n";
+            text += v.getItemName() + ": " + v.getUserCountInput() + " " + v.getUnit() + "\n";
         }
         
         itemList.setText(text);

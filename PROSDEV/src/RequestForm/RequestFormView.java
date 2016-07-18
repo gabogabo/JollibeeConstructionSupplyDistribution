@@ -62,7 +62,7 @@ public class RequestFormView extends javax.swing.JPanel {
             
             ChooseSupplyView v;
             while(rs.next()) {
-                v = new ChooseSupplyView(rs.getString("supply"), rs.getString("unit"), rs.getString("count") + " " + rs.getString("unit"));
+                v = new ChooseSupplyView(1, rs.getString("supply"), rs.getString("unit"), rs.getString("count") + " " + rs.getString("unit"));
                 itemViewList.add(v);
             }
         } catch (SQLException ex) {

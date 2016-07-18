@@ -25,19 +25,14 @@ public class TransferFormController {
         view = new TransferFormView();
     }
     
-    void updateModel(ArrayList<String> locationList) {
-        model.setLocationList(locationList);
+    void updateModel(ArrayList<String> warehouseList) {
+        model.setWarehouseList(warehouseList);
     }
     
     void updateView() {
-        view.updateComboBox(model.getLocationList());
+        view.updateComboBox(model.getWarehouseList());
         view.updateChooseSuplies();
         MainView.frame.setMainPanel(view);
-        
-//        JFrame f = new JFrame();
-//        f.add(view);
-//        f.setVisible(true);
-//        System.out.println(MainView.frame.mainPanel);
     }
     
 }
