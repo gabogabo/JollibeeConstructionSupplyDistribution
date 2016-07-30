@@ -49,6 +49,7 @@ public class TransferSubmitView extends javax.swing.JPanel {
         ChooseSupplyView v;
         for(int i = 0; i < size; i++) {
             v = itemViewList.get(i);
+            if(v.getUserCountInput() != 0)
             text += v.getItemName() + ": " + v.getUserCountInput() + " " + v.getUnit() + "\n";
         }
         
@@ -115,6 +116,12 @@ public class TransferSubmitView extends javax.swing.JPanel {
                 s.setInt(2, temp.getSupplyID());
                 s.setFloat(3, temp.getUserCountInput());
                 s.executeUpdate();
+                if(temp.getUserCountInput() != 0){
+                    s.setString(1, dist_id);
+                    s.setInt(2, temp.getSupplyID());
+                    s.setFloat(3, temp.getUserCountInput());
+                    s.executeUpdate();
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
