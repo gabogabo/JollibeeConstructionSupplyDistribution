@@ -26,15 +26,15 @@ public class TransferFormModule {
         ctrl.updateView();
     }
     
-    ArrayList<String> getWarehouseList() {
-        ArrayList<String> locationList = new ArrayList<>();
+    ArrayList<Location> getWarehouseList() {
+        ArrayList<Location> locationList = new ArrayList<>();
         try {
             Statement s = con.createStatement();
-            String sql = ("SELECT CONCAT(name, ', ', location) as 'warehouse' FROM warehouse ORDER BY whouse_id;");
+            String sql = ("SELECT name, location_id as 'id' FROM location WHERE type = 'warehouse' ORDER BY location_id;");
             ResultSet rs = s.executeQuery(sql);
             
             while(rs.next()) {
-                locationList.add(rs.getString("warehouse"));
+                locationList.add(new Location(rs.getString("name"), rs.getInt("id")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);

@@ -25,7 +25,7 @@ public class TransferFormController {
         view = new TransferFormView();
     }
     
-    void updateModel(ArrayList<String> warehouseList) {
+    void updateModel(ArrayList<Location> warehouseList) {
         model.setWarehouseList(warehouseList);
     }
     

@@ -62,29 +62,29 @@ public class TransferSubmitView extends javax.swing.JPanel {
         return dateStr;
     }
     
-    private String getOrderID() {
-        String order_id = "";
+    private String getDistID() {
+        String dist_id = "";
         try {
             Statement s = con.createStatement();
-            String sql = ("SELECT CONCAT('T', MAX(transfer_id)+1) as 'order_id' FROM supply_transfer;");
+            String sql = ("SELECT MAX(dist_id)+1 as 'id' FROM distributions;");
             ResultSet rs = s.executeQuery(sql);
             
             while(rs.next()) {
-                order_id = rs.getString("order_id");
+                dist_id = rs.getString("id");
             }
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return order_id;
+        return dist_id;
     }
     
     private void updateDatabase() {
-        String order_id = getOrderID();
+        String dist_id = getDistID();
         
         // update table supply transfer
         String sql = 
-            "INSERT INTO supply_transfer\n" +
-            "(to_whouse_id, from_whouse_id, date_filed, order_id)\n" +
+            "INSERT INTO distributions\n" +
+            "(to_location_id, from_location_id, date_filed, type)\n" +
             "VALUES\n" +
             "(?, ?, ?, ?);";
         
@@ -93,7 +93,7 @@ public class TransferSubmitView extends javax.swing.JPanel {
             s.setInt(1, whouseA_id);
             s.setInt(2, whouseB_id);
             s.setString(3, getDate());
-            s.setString(4, order_id);
+            s.setString(4, "transfer");
             s.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
@@ -111,7 +111,7 @@ public class TransferSubmitView extends javax.swing.JPanel {
             PreparedStatement s = con.prepareStatement(sqlX);
             for(int i = 0; i < itemViewList.size(); i++) {
                 temp = itemViewList.get(i);
-                s.setString(1, order_id);
+                s.setString(1, dist_id);
                 s.setInt(2, temp.getSupplyID());
                 s.setFloat(3, temp.getUserCountInput());
                 s.executeUpdate();

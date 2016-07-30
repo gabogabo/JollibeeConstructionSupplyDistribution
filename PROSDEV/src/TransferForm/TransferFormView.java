@@ -23,6 +23,7 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author Hannah
  */
+    
 public class TransferFormView extends javax.swing.JPanel {
 
     private ArrayList<ChooseSupplyView> itemViewList;
@@ -33,10 +34,9 @@ public class TransferFormView extends javax.swing.JPanel {
         itemViewList = new ArrayList<>();
         choosePanel.setLayout(new GridLayout(0, 1, 0, 10));
         setSize(new Dimension(1100, 700));
-        
     }
     
-    void updateComboBox(ArrayList<String> warehouseList) {
+    void updateComboBox(ArrayList<Location> warehouseList) {
         fromComboBox.setModel(new DefaultComboBoxModel(warehouseList.toArray()));
         toComboBox.setModel(new DefaultComboBoxModel(warehouseList.toArray()));
         
@@ -66,9 +66,9 @@ public class TransferFormView extends javax.swing.JPanel {
     ArrayList<ChooseSupplyView> getItemViewList(int whouse_id) {
         ArrayList<ChooseSupplyView> itemViewList = new ArrayList<>();
         String sql = 
-                "SELECT supply_id as 'id', CONCAT(s.name, ' (', type, ')') as supply, count, unit\n" +
-                "FROM supply s INNER JOIN warehouse w ON s.whouse_id = w.whouse_id\n" +
-                "WHERE w.whouse_id = ?;";
+                "SELECT supply_id as id, CONCAT(s.name, ' (', s.type, ')') as supply, count, unit\n" +
+                "FROM supply s INNER JOIN location l ON s.location_id = l.location_id\n" +
+                "WHERE l.location_id = ?;";
         try {
             PreparedStatement s = con.prepareStatement(sql);
             s.setInt(1, whouse_id);
@@ -276,8 +276,8 @@ public class TransferFormView extends javax.swing.JPanel {
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         String whouseA = fromComboBox.getSelectedItem().toString();
         String whouseB = toComboBox.getSelectedItem().toString();
-        int whouseA_id = fromComboBox.getSelectedIndex();
-        int whouseB_id = toComboBox.getSelectedIndex();
+        int whouseA_id = ((Location)fromComboBox.getSelectedItem()).getID();
+        int whouseB_id = ((Location)toComboBox.getSelectedItem()).getID();
         
         System.out.println("> " + whouseA_id + ", " + whouseB_id);
         
