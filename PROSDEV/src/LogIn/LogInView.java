@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static Database.DB.con;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -145,6 +146,7 @@ public class LogInView extends javax.swing.JFrame {
             }
             else{
                 //user does not exist
+                JOptionPane.showMessageDialog(this, "Invalid username/password", "Warning", JOptionPane.ERROR_MESSAGE);
             }
         }
         catch(Exception e){
