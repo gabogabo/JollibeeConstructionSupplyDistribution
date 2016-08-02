@@ -17,6 +17,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static Database.DB.con;
 import javax.swing.JOptionPane;
+import java.security.MessageDigest;
+import java.nio.charset.StandardCharsets;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -128,15 +131,19 @@ public class LogInView extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String userName = userField.getText();
-        String pass = passField.getText();
+        String pass = new String(passField.getPassword());
         
         
         try{
-            PreparedStatement query = con.prepareStatement("SELECT * from user WHERE username = ? AND password = ?");
+            PreparedStatement query = con.prepareStatement("SELECT password, salt from user WHERE username = ?");
             query.setString(1, userName);
-            query.setString(2, pass);
+          
             ResultSet rs = query.executeQuery();
             if(rs.next()){
+                String salt = rs.getString(2);
+                pass = pass.concat(salt);
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                by
                 MainView m = new MainView();
                 this.setDefaultCloseOperation(EXIT_ON_CLOSE);
                 this.setVisible(false);
