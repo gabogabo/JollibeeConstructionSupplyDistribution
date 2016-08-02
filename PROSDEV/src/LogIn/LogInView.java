@@ -17,10 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static Database.DB.con;
 import javax.swing.JOptionPane;
-import java.util.UUID;
-import java.security.MessageDigest;
-import java.nio.charset.StandardCharsets;
-import javax.xml.bind.DatatypeConverter;
+
 /**
  *
  * @author Hannah
@@ -131,26 +128,21 @@ public class LogInView extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String userName = userField.getText();
-        String pass = new String(passField.getPassword());
+        String pass = passField.getText();
+        
         
         try{
-            PreparedStatement query = con.prepareStatement("SELECT password, salt FROM user WHERE username = ?");
+            PreparedStatement query = con.prepareStatement("SELECT * from user WHERE username = ? AND password = ?");
             query.setString(1, userName);
+            query.setString(2, pass);
             ResultSet rs = query.executeQuery();
             if(rs.next()){
-                String salt = rs.getString(2);
-                pass = pass.concat(salt);
-                MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                byte[] hash = digest.digest(pass.getBytes(StandardCharsets.UTF_8));
-                String hashPass = DatatypeConverter.printHexBinary(hash); //hashing with salt
-                if(hashPass.equals(rs.getString(1))){
-                    MainView m = new MainView();
-                    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                    this.setVisible(false);
-                    this.dispose();
-                    m.setVisible(true);
-                }
-              
+                MainView m = new MainView();
+                this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                this.setVisible(false);
+                this.dispose();
+                m.setVisible(true);
+                //login
             }
             else{
                 //user does not exist
@@ -160,7 +152,7 @@ public class LogInView extends javax.swing.JFrame {
         catch(Exception e){
             
         }
-        pass = ""; //security
+                
     }//GEN-LAST:event_jButton1ActionPerformed
     
     public static void main(String args[]) {
