@@ -143,12 +143,17 @@ public class LogInView extends javax.swing.JFrame {
                 String salt = rs.getString(2);
                 pass = pass.concat(salt);
                 MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                by
-                MainView m = new MainView();
-                this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                this.setVisible(false);
-                this.dispose();
-                m.setVisible(true);
+                byte[] hash = digest.digest(pass.getBytes(StandardCharsets.UTF_8));
+                String hashPass = DatatypeConverter.printHexBinary(hash); //hashing with salt
+                if(hashPass.equals(rs.getString(1))){
+                    
+                    MainView m = new MainView();
+                    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                    this.setVisible(false);
+                    this.dispose();
+                    m.setVisible(true);
+                }
+                
                 //login
             }
             else{
@@ -159,7 +164,7 @@ public class LogInView extends javax.swing.JFrame {
         catch(Exception e){
             
         }
-                
+        pass = ""; //security
     }//GEN-LAST:event_jButton1ActionPerformed
     
     public static void main(String args[]) {
