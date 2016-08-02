@@ -64,7 +64,9 @@ public class LogInView extends javax.swing.JFrame {
                     this.dispose();
                     MainView.frame.setVisible(true);
                 }
-                
+                else{
+                    JOptionPane.showMessageDialog(this, "Invalid username/password", "Warning", JOptionPane.ERROR_MESSAGE);
+                }
                 //login
             }
             else{
