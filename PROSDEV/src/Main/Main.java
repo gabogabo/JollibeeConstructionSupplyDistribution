@@ -6,6 +6,7 @@
 package Main;
 
 import Inventory.InventoryModule;
+import LogIn.LogInView;
 
 /**
  *
@@ -14,7 +15,9 @@ import Inventory.InventoryModule;
 public class Main {
     
     public static void main(String args[]) {
-        MainView.frame.setVisible(true);
+        // MainView.frame.setVisible(true); 
+        LogInView login = new LogInView();
+        login.setVisible(true);
     }
     
 }

@@ -6,12 +6,9 @@
 package Main;
 
 import Inventory.InventoryModule;
-import RequestForm.RequestFormModule;
+import RequestForm2.RequestFormModule;
 import TransferForm.TransferFormModule;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Toolkit;
-import javax.swing.ImageIcon;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -22,18 +19,38 @@ import javax.swing.JPanel;
 public class MainView extends javax.swing.JFrame {
 
     public static MainView frame = new MainView();
+    private int type;
     private JLabel homeLabel;
     /**
      * Creates new form MainView
      */
     public MainView() {
         initComponents();
+        this.type = type;
         setTitle("Supply Distribution");
         homeLabel = label;
         
 //        ImageIcon ImageIcon = new ImageIcon("icon-xs.png");
 //        Image Image = ImageIcon.getImage();
 //        this.setIconImage(Image);
+    }
+    
+    public void setType(int type) {
+        this.type = type;
+        setList();
+    }
+    
+    private void setList() {
+        DefaultListModel model = new DefaultListModel();
+        
+        if(type == 0)                               // if user is a supply dist admin
+            model.addElement("   Transfer Form");
+        if(type == 1)                               // if user is a project admin
+            model.addElement("   Request Form");
+        model.addElement("   Inventory");
+        model.addElement("   Transfers");
+        
+        jList1.setModel(model);
     }
     
     public void setMainPanel(JPanel p) {

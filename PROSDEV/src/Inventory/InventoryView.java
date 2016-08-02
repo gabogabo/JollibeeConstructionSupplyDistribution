@@ -51,12 +51,12 @@ public class InventoryView extends javax.swing.JFrame {
         boolean hasWhouse = false, hasSupply = false;
         String where = "";
         if(whouse_id != -1 && !supply_name.equals("Show All")) {
-            where = "WHERE w.whouse_id = ? and s.name = ?";
+            where = "WHERE l.location_id = ? and s.name = ?";
             hasWhouse = true;
             hasSupply = true;
         }
         else if(whouse_id != -1) {
-            where = "WHERE w.whouse_id = ?";
+            where = "WHERE l.location_id = ?";
             hasWhouse = true;
         }
         else if(!supply_name.equals("Show All")) {
@@ -64,11 +64,20 @@ public class InventoryView extends javax.swing.JFrame {
             hasSupply = true;
         }
         
+        /*
         String sql = 
             "SELECT s.name AS 'supply', type, SUM(count) as count, unit\n" +
             "FROM supply s INNER JOIN warehouse w ON s.whouse_id = w.whouse_id\n" +
             where + "\n" +
             "GROUP BY CONCAT(supply, type)\n" +
+            "ORDER BY supply_id;";
+        */
+        
+        String sql = 
+            "SELECT s.name AS 'supply', s.type, SUM(count) as count, unit\n" +
+            "FROM supply s INNER JOIN location l ON s.location_id = l.location_id\n" +
+            where + "\n" +
+            "GROUP BY CONCAT(supply, s.type)\n" +
             "ORDER BY supply_id;";
         
         try {

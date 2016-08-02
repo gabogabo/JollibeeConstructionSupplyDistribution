@@ -12,9 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTable;
 import static Database.DB.con;
-import Main.MainView;
 
 /**
  *
@@ -32,11 +30,11 @@ public class InventoryModule {
         ArrayList<String> locationList = new ArrayList<>();
         try {
             Statement s = con.createStatement();
-            String sql = ("SELECT CONCAT(name, ', ', location) as 'warehouse' FROM warehouse ORDER BY whouse_id;");
+            String sql = ("select name from location where type = 'warehouse';");
             ResultSet rs = s.executeQuery(sql);
             
             while(rs.next()) {
-                locationList.add(rs.getString("warehouse"));
+                locationList.add(rs.getString("name"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static Database.DB.con;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
@@ -33,6 +34,48 @@ public class LogInView extends javax.swing.JFrame {
      */
     public LogInView() {
         initComponents();
+    }
+    
+    void login() {
+        String userName = userField.getText();
+        String pass = new String(passField.getPassword());
+        System.out.println(userName + ", " + pass);
+        
+        
+        try{
+            PreparedStatement query = con.prepareStatement("SELECT password, salt, type from user WHERE username = ?");
+            query.setString(1, userName);
+          
+            ResultSet rs = query.executeQuery();
+            int type;
+            if(rs.next()){
+                String salt = rs.getString(2);
+                pass = pass.concat(salt);
+                type = rs.getInt("type");
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                byte[] hash = digest.digest(pass.getBytes(StandardCharsets.UTF_8));
+                String hashPass = DatatypeConverter.printHexBinary(hash); //hashing with salt
+                if(hashPass.equals(rs.getString(1))){
+                    
+                    
+                    MainView.frame.setType(type);
+                    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                    this.setVisible(false);
+                    this.dispose();
+                    MainView.frame.setVisible(true);
+                }
+                
+                //login
+            }
+            else{
+                //user does not exist
+                JOptionPane.showMessageDialog(this, "Invalid username/password", "Warning", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        catch(Exception e){
+            
+        }
+        pass = ""; //security
     }
 
     @SuppressWarnings("unchecked")
@@ -53,6 +96,7 @@ public class LogInView extends javax.swing.JFrame {
         inventoryPanel.setPreferredSize(new java.awt.Dimension(1100, 700));
 
         userField.setFont(new java.awt.Font("Quicksand Book", 0, 18)); // NOI18N
+        userField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         userField.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel1.setFont(new java.awt.Font("Quicksand Book", 0, 18)); // NOI18N
@@ -64,11 +108,24 @@ public class LogInView extends javax.swing.JFrame {
         jLabel2.setText("PASSWORD");
 
         passField.setFont(new java.awt.Font("Quicksand Book", 0, 18)); // NOI18N
-        passField.setText("jPasswordField1");
+        passField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         passField.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        passField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passFieldActionPerformed(evt);
+            }
+        });
+        passField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passFieldKeyPressed(evt);
+            }
+        });
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jButton1.setText("Log-in");
+        jButton1.setBackground(java.awt.SystemColor.controlHighlight);
+        jButton1.setFont(new java.awt.Font("Quicksand Bold", 0, 24)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(51, 51, 51));
+        jButton1.setText("Log In");
+        jButton1.setBorder(null);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -79,25 +136,21 @@ public class LogInView extends javax.swing.JFrame {
         inventoryPanel.setLayout(inventoryPanelLayout);
         inventoryPanelLayout.setHorizontalGroup(
             inventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(inventoryPanelLayout.createSequentialGroup()
-                .addGroup(inventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(inventoryPanelLayout.createSequentialGroup()
-                        .addGap(399, 399, 399)
-                        .addGroup(inventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(passField, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(inventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(userField)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(inventoryPanelLayout.createSequentialGroup()
-                        .addGap(473, 473, 473)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(410, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, inventoryPanelLayout.createSequentialGroup()
+                .addContainerGap(409, Short.MAX_VALUE)
+                .addGroup(inventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(passField, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, inventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(userField)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)))
+                .addGap(400, 400, 400))
         );
         inventoryPanelLayout.setVerticalGroup(
             inventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(inventoryPanelLayout.createSequentialGroup()
-                .addGap(230, 230, 230)
+                .addGap(157, 157, 157)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(userField, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -105,9 +158,9 @@ public class LogInView extends javax.swing.JFrame {
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(passField, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(164, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(268, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -130,42 +183,20 @@ public class LogInView extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String userName = userField.getText();
-        String pass = new String(passField.getPassword());
-        
-        
-        try{
-            PreparedStatement query = con.prepareStatement("SELECT password, salt from user WHERE username = ?");
-            query.setString(1, userName);
-          
-            ResultSet rs = query.executeQuery();
-            if(rs.next()){
-                String salt = rs.getString(2);
-                pass = pass.concat(salt);
-                MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                byte[] hash = digest.digest(pass.getBytes(StandardCharsets.UTF_8));
-                String hashPass = DatatypeConverter.printHexBinary(hash); //hashing with salt
-                if(hashPass.equals(rs.getString(1))){
-                    
-                    MainView m = new MainView();
-                    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                    this.setVisible(false);
-                    this.dispose();
-                    m.setVisible(true);
-                }
-                
-                //login
-            }
-            else{
-                //user does not exist
-                JOptionPane.showMessageDialog(this, "Invalid username/password", "Warning", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-        catch(Exception e){
-            
-        }
-        pass = ""; //security
+        login();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void passFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passFieldKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode()==KeyEvent.VK_ENTER) {
+            login();
+        }
+    }//GEN-LAST:event_passFieldKeyPressed
+
+    private void passFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passFieldActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_passFieldActionPerformed
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

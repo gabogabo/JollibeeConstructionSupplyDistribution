@@ -14,11 +14,9 @@ import java.awt.GridLayout;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -38,7 +36,8 @@ public class RequestFormView extends javax.swing.JPanel {
     }
     
     void updateChooseSuplies() {
-        ArrayList<ChooseSupplyView> list = getItemViewList();
+        ArrayList<ChooseSupplyView> list = getItemViewList(0);  // temp
+//        ArrayList<ChooseSupplyView> list = getItemViewList(getNearWarehouse());  // temp
         itemViewList = new ArrayList<>();
         int size = list.size();
         ChooseSupplyView v;
@@ -55,13 +54,15 @@ public class RequestFormView extends javax.swing.JPanel {
         choosePanel.revalidate();
     }
     
-    ArrayList<ChooseSupplyView> getItemViewList() {
+    ArrayList<ChooseSupplyView> getItemViewList(int whouse_id) {
         ArrayList<ChooseSupplyView> itemViewList = new ArrayList<>();
         String sql = 
                 "SELECT supply_id as id, CONCAT(s.name, ' (', s.type, ')') as supply, count, unit\n" +
-                "FROM supply s INNER JOIN location l ON s.location_id = l.location_id;";
+                "FROM supply s INNER JOIN location l ON s.location_id = l.location_id\n" +
+                "WHERE l.location_id = ?;";
         try {
             PreparedStatement s = con.prepareStatement(sql);
+            s.setInt(1, whouse_id);
             ResultSet rs = s.executeQuery();
             
             ChooseSupplyView v;
@@ -73,6 +74,24 @@ public class RequestFormView extends javax.swing.JPanel {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return itemViewList;
+    }
+    
+    private int getNearWarehouse(String name) {
+        int whouse_id = -1;
+        String sql = 
+                "select location_id from location where address = ? and type = 'warehouse';";
+        try {
+            PreparedStatement s = con.prepareStatement(sql);
+            s.setString(1, name);
+            ResultSet rs = s.executeQuery();
+            
+            if(rs.next()) {
+                whouse_id = rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return whouse_id;
     }
     
     @SuppressWarnings("unchecked")
