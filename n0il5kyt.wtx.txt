@@ -1,0 +1,17 @@
+﻿Revert "Merge remote-tracking branch 'origin/master'"
+
+This reverts commit 00664a1fec257b98b18b4dd00d8736e06dec2b14, reversing
+changes made to 3de811279981771d7dca6f1624a558eed07a59f8.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+#	modified:   PROSDEV/src/LogIn/LogInView.java
+#
+# Changes not staged for commit:
+#	deleted:    Schema C.sql
+#
+
