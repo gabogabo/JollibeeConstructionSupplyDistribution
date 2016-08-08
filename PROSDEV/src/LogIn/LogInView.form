@@ -63,11 +63,9 @@
                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
                       <Component id="jButton1" max="32767" attributes="0"/>
                       <Component id="passField" alignment="1" pref="291" max="32767" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
-                          <Component id="userField" max="32767" attributes="0"/>
-                          <Component id="jLabel1" alignment="1" pref="291" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
+                      <Component id="userField" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jLabel1" alignment="1" pref="291" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="400" max="-2" attributes="0"/>
               </Group>

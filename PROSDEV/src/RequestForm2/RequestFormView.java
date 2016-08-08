@@ -9,6 +9,7 @@ import TransferForm.*;
 import Database.DB;
 import static Database.DB.con;
 import Main.MainView;
+import static User.User.user;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.sql.PreparedStatement;
@@ -26,6 +27,7 @@ import java.util.logging.Logger;
 public class RequestFormView extends javax.swing.JPanel {
 
     private ArrayList<ChooseSupplyView> itemViewList;
+    private int whouse_id;
     
     public RequestFormView() {
         initComponents();
@@ -36,8 +38,8 @@ public class RequestFormView extends javax.swing.JPanel {
     }
     
     void updateChooseSuplies() {
-        ArrayList<ChooseSupplyView> list = getItemViewList(0);  // temp
-//        ArrayList<ChooseSupplyView> list = getItemViewList(getNearWarehouse());  // temp
+//        ArrayList<ChooseSupplyView> list = getItemViewList(0);  // temp
+        ArrayList<ChooseSupplyView> list = getItemViewList(getNearWarehouse());  // temp
         itemViewList = new ArrayList<>();
         int size = list.size();
         ChooseSupplyView v;
@@ -76,22 +78,28 @@ public class RequestFormView extends javax.swing.JPanel {
         return itemViewList;
     }
     
-    private int getNearWarehouse(String name) {
-        int whouse_id = -1;
+    private int getNearWarehouse() {
+        
+        int id = 0;
         String sql = 
                 "select location_id from location where address = ? and type = 'warehouse';";
         try {
             PreparedStatement s = con.prepareStatement(sql);
-            s.setString(1, name);
+            s.setString(1, user.getAddress());
             ResultSet rs = s.executeQuery();
             
             if(rs.next()) {
-                whouse_id = rs.getInt(1);
+                id = rs.getInt(1);
             }
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return whouse_id;
+        
+        System.out.println("LOCID: " + user.getAddress());
+        System.out.println("NEARW: " + id);
+        
+        whouse_id = id;
+        return id;
     }
     
     @SuppressWarnings("unchecked")
@@ -199,16 +207,14 @@ public class RequestFormView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
-//        String whouseA = fromComboBox.getSelectedItem().toString();
-//        String whouseB = toComboBox.getSelectedItem().toString();
-//        int whouseA_id = ((Location)fromComboBox.getSelectedItem()).getID();
-//        int whouseB_id = ((Location)toComboBox.getSelectedItem()).getID();
+
+        
         
 //        System.out.println("> " + whouseA_id + ", " + whouseB_id);
         
-//            RequestSubmitView s = new RequestSubmitView(this, whouseA, whouseB, whouseA_id, whouseB_id, itemViewList);
+        RequestSubmitView s = new RequestSubmitView(this, whouse_id, user.getLocationId(), itemViewList);
 
-        RequestSubmitView s = new RequestSubmitView(this, itemViewList);
+//        RequestSubmitView s = new RequestSubmitView(this, itemViewList);
         MainView.frame.setMainPanel(s);
     }//GEN-LAST:event_submitButtonActionPerformed
 

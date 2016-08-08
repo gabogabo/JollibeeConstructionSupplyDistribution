@@ -28,13 +28,14 @@ public class RequestSubmitView extends javax.swing.JPanel {
     private JPanel form;
     int size;
     ArrayList<ChooseSupplyView> itemViewList;
-    String whouseA, whouseB;
-    int whouseA_id, whouseB_id;
+    int whouse_id, projsite_id;
     
-    public RequestSubmitView(RequestFormView form, ArrayList<ChooseSupplyView> itemViewList) {
+    public RequestSubmitView(RequestFormView form, int whouse_id, int projsite_id, ArrayList<ChooseSupplyView> itemViewList) {
         initComponents();
         setSize(new Dimension(1100, 700));
 
+        this.whouse_id = whouse_id;
+        this.projsite_id = projsite_id;
         this.form = form;
         
         size = itemViewList.size();
@@ -85,8 +86,8 @@ public class RequestSubmitView extends javax.swing.JPanel {
         
         try {
             PreparedStatement s = con.prepareStatement(sql);
-            s.setInt(1, whouseA_id);
-            s.setInt(2, whouseB_id);
+            s.setInt(1, projsite_id);
+            s.setInt(2, whouse_id);
             s.setString(3, getDate());
             s.setString(4, "request");
             s.executeUpdate();
@@ -244,7 +245,7 @@ public class RequestSubmitView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
-//        updateDatabase();
+        updateDatabase();
         
         FinishedView v = new FinishedView();
         /* DISREGARD

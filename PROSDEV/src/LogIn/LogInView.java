@@ -5,17 +5,14 @@
  */
 package LogIn;
 
-import Tracking.*;
 import Main.*;
-import javax.swing.table.DefaultTableModel;
-import Database.DB;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static Database.DB.con;
+import static User.User.user;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import java.security.MessageDigest;
@@ -43,20 +40,24 @@ public class LogInView extends javax.swing.JFrame {
         
         
         try{
-            PreparedStatement query = con.prepareStatement("SELECT password, salt, type from user WHERE username = ?");
+            PreparedStatement query = con.prepareStatement("SELECT password, salt, type, location_id from user WHERE username = ?");
             query.setString(1, userName);
           
             ResultSet rs = query.executeQuery();
             int type;
+            int location_id;
             if(rs.next()){
                 String salt = rs.getString(2);
                 pass = pass.concat(salt);
                 type = rs.getInt("type");
+                location_id = rs.getInt("location_id");
                 MessageDigest digest = MessageDigest.getInstance("SHA-256");
                 byte[] hash = digest.digest(pass.getBytes(StandardCharsets.UTF_8));
                 String hashPass = DatatypeConverter.printHexBinary(hash); //hashing with salt
                 if(hashPass.equals(rs.getString(1))){
                     
+                    if(type == 1)   // if project admin
+                        setUserLocation(location_id);
                     
                     MainView.frame.setType(type);
                     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -78,6 +79,24 @@ public class LogInView extends javax.swing.JFrame {
             
         }
         pass = ""; //security
+    }
+    
+    private void setUserLocation(int location_id) {
+        try {
+            PreparedStatement sql = con.prepareStatement("SELECT address FROM location WHERE location_id = ?");
+            sql.setInt(1, location_id);
+            ResultSet rs = sql.executeQuery();
+            String address;
+            
+            if(rs.next()) {
+                address = rs.getString(1);
+                user.setAddress(address);
+                user.setLocationId(location_id);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(LogInView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @SuppressWarnings("unchecked")
