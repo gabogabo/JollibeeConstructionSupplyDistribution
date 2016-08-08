@@ -11,7 +11,9 @@ import java.io.PrintWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -29,7 +31,9 @@ import org.json.JSONObject;
  */
 @WebServlet(name = "Servlet", urlPatterns = {"/Distributions"})
 public class Distributions extends HttpServlet {
-
+    
+    private int type, location_id;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,39 +48,54 @@ public class Distributions extends HttpServlet {
         response.setContentType("text/json;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String token = request.getParameter("token");
-            out.println(getDistributions(token));
+            if(isAuthorized(token) && isActive(token)) {
+                updateTime(token);
+                out.println(getDistributions());
+            }
+            else {
+                out.println("Error");
+            }
         }    
     }
     
-    JSONArray getDistributions(String token) {
+    private boolean isAuthorized(String token) {
         
         /* 
             - identify if token is valid
             - if valid get type and location id 
         */
         
-        int type = -1, location_id = -1;
-        String sql = "select type, location_id from user where token = ?;";
+        boolean isAuthorized = false;
+        
+        String sql = "select type, location_id\n" +
+                        "from user \n" +
+                        "where token = ?;";
+        
         try {
             PreparedStatement s = con.prepareStatement(sql);
             s.setString(1, token);
             ResultSet rs = s.executeQuery();
             
-            while(rs.next()) {
+            if(rs.next()) {
                 type = rs.getInt(1);
                 location_id = rs.getInt(2);
+                isAuthorized = true;
             }
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        return isAuthorized;
         
+    }
+    
+    JSONArray getDistributions() {
         
         /* produce json */
         
         JSONArray json = new JSONArray();
         try {
-            sql = "";
+            String sql = "";
             PreparedStatement s = con.prepareStatement(sql);
             if(type == 0) {
                 sql = ("SELECT * from distributions;");
@@ -109,7 +128,75 @@ public class Distributions extends HttpServlet {
         }
         return json;
     }
-
+    
+    private void updateTime(String token) {
+        String sql = "UPDATE user \n" +
+                        "SET token_time_start = ?\n" +
+                        "WHERE token = ?;";
+        try {
+            PreparedStatement s = con.prepareStatement(sql);
+            s.setString(1, getTime());
+            s.setString(2, token);
+            s.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private boolean isActive(String token) {
+        boolean isActive = false;
+        
+        String sql = "SELECT token_time_start\n" +
+                        "FROM user\n" +
+                        "WHERE token = ?;";
+        try {
+            PreparedStatement s = con.prepareStatement(sql);
+            s.setString(1, token);
+            ResultSet rs = s.executeQuery();
+            String time;
+            
+            if(rs.next()) {
+                time = rs.getString(1);
+                if(getDifference(time) <= 30) {  // if less than 30 mins
+                    isActive = true;
+                }
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return isActive;
+    }
+    
+    private long getDifference(String timeStr) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date time2 = format.parse(getTime());
+            Date time1 = format.parse(timeStr);
+            
+            // Get msec from each, and subtract.
+            long diff = time2.getTime() - time1.getTime();
+            //long diffMinutes = diff / (60 * 1000);
+            long diffMinutes = diff / (60 * 1000) % 60;
+            System.out.println("DIFFMINS: " + diffMinutes);
+            System.out.println(" T1: " + time1);
+            System.out.println(" T2: " + time2);
+            return diffMinutes;
+        } catch (ParseException ex) {
+            Logger.getLogger(Distributions.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
+    
+    private String getTime() {
+        Date date = new Date();
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String dateStr = f.format(date);
+        return dateStr;
+    }
+    
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -122,7 +209,7 @@ public class Distributions extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
     }
 
     /**
