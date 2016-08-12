@@ -52,9 +52,6 @@ public class Distributions extends HttpServlet {
                 updateTime(token);
                 out.println(getDistributions());
             }
-            else {
-                out.println("Error");
-            }
         }    
     }
     
@@ -209,7 +206,7 @@ public class Distributions extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -223,7 +220,7 @@ public class Distributions extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
     }
 
     /**

@@ -9,6 +9,9 @@ import Database.DB;
 import static Database.DB.con;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,6 +24,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -46,56 +52,93 @@ public class Start extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String u = request.getParameter("username");
             String p = request.getParameter("password");
+            JSONObject json = new JSONObject();
+            
             if(isAuthorized(u, p)) {
-                out.print("Your Token: " + token);
+                try {
+                    json.put("token", token);
+                    out.println(json);
+                } catch (JSONException ex) {
+                    Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            else
-                out.print("Error");
         }    
     }
     
     private boolean isAuthorized(String username, String password) {
-        
-        /* 
-            - identify if token is valid
-            - if valid get type and location id 
-        */
-        
         boolean isAuthorized = false;
-        
-        String sql = "select sha(concat(username, rand())) as token\n" +
-                        "from user \n" +
-                        "where username = ? and password = ?;";
+        String modifiedPw = password;
         
         try {
-            PreparedStatement s = con.prepareStatement(sql);
-            s.setString(1, username);
-            s.setString(2, password);
-            ResultSet rs = s.executeQuery();
             
-            if(rs.next()) {
-                token = rs.getString(1);
-                setToken(token, username, password);
-                isAuthorized = true;
+            PreparedStatement query = 
+                    con.prepareStatement("SELECT sha(concat(username, rand())) as token, password, salt from user WHERE username = ?");
+            query.setString(1, username);
+            
+            ResultSet rs = query.executeQuery();
+            if(rs.next()){
+                String salt = rs.getString(3);
+                modifiedPw = modifiedPw.concat(salt);
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                byte[] hash = digest.digest(modifiedPw.getBytes(StandardCharsets.UTF_8));
+                String hashPass = DatatypeConverter.printHexBinary(hash);
+                if(hashPass.equals(rs.getString(2))){
+                    token = rs.getString(1);
+                    setToken(token, username);
+                    isAuthorized = true;
+                }
             }
+            
+            /*******/
+            
+            /*
+            - identify if token is valid
+            - if valid get type and location id
+            */
+            /*
+            boolean isAuthorized = false;
+            
+            String sql = "select sha(concat(username, rand())) as token\n" +
+                    "from user \n" +
+                    "where username = ? and password = ?;";
+            
+            try {
+                PreparedStatement s = con.prepareStatement(sql);
+                s.setString(1, username);
+                s.setString(2, password);
+                ResultSet rs = s.executeQuery();
+                
+                if(rs.next()) {
+                    token = rs.getString(1);
+                    setToken(token, username, password);
+                    isAuthorized = true;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            return isAuthorized;
+            */
+            
         } catch (SQLException ex) {
-            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return isAuthorized;
         
     }
     
-    private void setToken(String token, String username, String password) {
+    private void setToken(String token, String username) {
         String sql = "UPDATE user \n" +
                         "SET token = ?, token_time_start = ?\n" +
-                        "WHERE username = ? and password = ?;";
+                        "WHERE username = ?;";
         try {
             PreparedStatement s = con.prepareStatement(sql);
             s.setString(1, token);
             s.setString(2, getTime());
             s.setString(3, username);
-            s.setString(4, password);
             s.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
@@ -137,7 +180,7 @@ public class Start extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
     }
 
     /**
