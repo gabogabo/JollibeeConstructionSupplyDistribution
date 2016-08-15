@@ -8,6 +8,7 @@ package Main;
 import Inventory.InventoryModule;
 import RequestForm2.RequestFormModule;
 import TransferForm.TransferFormModule;
+import Tracking.TrackingModule;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -76,9 +77,8 @@ public class MainView extends javax.swing.JFrame {
     
     void setViewTransfers() {
 //        jList1.clearSelection();
-        mainPanel.removeAll();
-        mainPanel.add(homeLabel);
-        repaint(); revalidate();
+        TrackingModule m = new TrackingModule();
+        m.start();
     } 
 
     /**
