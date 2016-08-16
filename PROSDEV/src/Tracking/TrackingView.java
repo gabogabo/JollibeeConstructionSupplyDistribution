@@ -7,7 +7,8 @@ package Tracking;
 
 import Database.DB;
 import static Database.DB.con;
-
+import TransferForm.FinishedView;
+import Main.MainView;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -200,6 +201,8 @@ public class TrackingView extends javax.swing.JPanel {
                 int dgRes = JOptionPane.showConfirmDialog(btn, "Would you like to cancel this transfer?", "Cancel Transfer", dlg);
                 if(dgRes == JOptionPane.YES_OPTION){
                     System.out.println(trackTable.getColumnModel().getColumn(1).toString());
+                    CancelView v = new CancelView();
+                    MainView.frame.setMainPanel(v);
                     
                 }
             }
