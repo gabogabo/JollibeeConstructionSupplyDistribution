@@ -78,7 +78,7 @@ public class TrackingView extends javax.swing.JPanel {
                 break;
         }*/
         if(!status.equals("Show All")){
-            where = "WHERE d.status = \"" + statusBox.getSelectedItem().toString()+"\"";
+            where = "WHERE d.status = ?";
            // prin
            // showSelect = true;
         }
@@ -91,7 +91,8 @@ public class TrackingView extends javax.swing.JPanel {
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             
-//            ps.setString(1, statusBox.getSelectedItem().toString());
+            if(!status.equals("Show All"))
+                ps.setString(1, statusBox.getSelectedItem().toString());
 
             ResultSet rs = ps.executeQuery();
         
