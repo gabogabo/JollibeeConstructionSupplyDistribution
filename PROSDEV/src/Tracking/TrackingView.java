@@ -7,15 +7,19 @@ package Tracking;
 
 import Database.DB;
 import static Database.DB.con;
-import com.sun.glass.ui.Cursor;
+
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
@@ -60,16 +64,26 @@ public class TrackingView extends javax.swing.JPanel {
         //model.addColumn(button);
         String where = "";
         String sql;
-        boolean isPending = false, isCompleted = false;
+        boolean showSelect = false, isCompleted = false;
        
-        
-        if(statusBox.getSelectedItem().toString().equals("Pending")){
-            where = "WHERE d.status = ?";
-            isPending = true;
+        /*
+        switch (statusBox.getSelectedItem().toString()) {
+            case "Pending":
+                where = "WHERE d.status = ?";
+                isPending = true;
+                break;
+            case "Completed":
+                where = "WHERE d.status = ?";
+                isCompleted = true;
+                break;
+        }*/
+        if(!status.equals("Show All")){
+            where = "WHERE d.status = \"" + statusBox.getSelectedItem().toString()+"\"";
+           // prin
+           // showSelect = true;
         }
-        else if(statusBox.getSelectedItem().toString().equals("Completed")){
-            where = "WHERE d.status = ?";
-            isCompleted = true;
+        else{
+            where = "";
         }
         
         sql = "SELECT d.dist_id, d.type, d.date_filed, d.status\n" + "FROM distributions d\n"+where;
@@ -78,7 +92,7 @@ public class TrackingView extends javax.swing.JPanel {
             PreparedStatement ps = con.prepareStatement(sql);
             
 //            ps.setString(1, statusBox.getSelectedItem().toString());
-            
+
             ResultSet rs = ps.executeQuery();
         
             ArrayList row;
@@ -99,13 +113,15 @@ public class TrackingView extends javax.swing.JPanel {
         
         
         trackTable.setModel(model);
-        //set custom renderer to last column
+        if(!statusBox.getSelectedItem().toString().equals("Completed"))
+        {//set custom renderer to last column
         trackTable.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());
         
         //set custom editor to last column
         trackTable.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor(new JTextField()));
        // JScrollPane pane = new JScrollPane(trackTable);
         //getContentPane().add(pane);
+        }
     }
     
     class ButtonRenderer extends JButton implements TableCellRenderer{
@@ -120,6 +136,7 @@ public class TrackingView extends javax.swing.JPanel {
     public Component getTableCellRendererComponent(JTable table, Object obj, boolean isSelected, boolean hasFocus, int row, int col) {
         //passed object as button text
             setText("Cancel"); 
+            
         return this;
     }
 }
@@ -135,7 +152,8 @@ public class TrackingView extends javax.swing.JPanel {
         super(text);
         btn.setText("Cancel");
         btn.setOpaque(true);
-      
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+           
         //buttonclicked
         btn.addActionListener(new ActionListener() {
 
@@ -145,7 +163,20 @@ public class TrackingView extends javax.swing.JPanel {
                 fireEditingStopped();
             }
         });
-            
+        /*
+        btn.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                 setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+         */   
     }
          //override methods
         @Override
@@ -155,7 +186,7 @@ public class TrackingView extends javax.swing.JPanel {
            // label = "Cancel";
             //btn.setText(label);
             isClicked = true;
-            
+           
             return btn;
         }
         
@@ -167,7 +198,8 @@ public class TrackingView extends javax.swing.JPanel {
                 System.out.println("Clicked");
                 int dgRes = JOptionPane.showConfirmDialog(btn, "Would you like to cancel this transfer?", "Cancel Transfer", dlg);
                 if(dgRes == JOptionPane.YES_OPTION){
-                    System.out.println("YES");
+                    System.out.println(trackTable.getColumnModel().getColumn(1).toString());
+                    
                 }
             }
             isClicked = false;
@@ -208,7 +240,12 @@ public class TrackingView extends javax.swing.JPanel {
         topPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         statusBox.setFont(new java.awt.Font("Quicksand", 0, 24)); // NOI18N
-        statusBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All", "Pending", "In Progress", "Completed" }));
+        statusBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Show All", "Pending", "In Progress", "Completed" }));
+        statusBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statusBoxActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Quicksand", 1, 24)); // NOI18N
         jLabel1.setText("Select Status:");
@@ -289,6 +326,10 @@ public class TrackingView extends javax.swing.JPanel {
                 .addContainerGap(84, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void statusBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusBoxActionPerformed
+        updateTable(statusBox.getSelectedItem().toString());
+    }//GEN-LAST:event_statusBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

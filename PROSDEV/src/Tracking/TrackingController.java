@@ -26,7 +26,7 @@ public class TrackingController {
     }
      void updateView() {
        // view.updateChooseSuplies();
-        view.updateTable("All");
+        view.updateTable("Show All");
         MainView.frame.setMainPanel(view);
     }
 }
